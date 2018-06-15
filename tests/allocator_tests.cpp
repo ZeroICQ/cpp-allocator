@@ -3,6 +3,7 @@
 
 TEST_CASE("stub")
 {
+    atl::allocator<int> a;
     REQUIRE(true);
 //    CHECK(false);
 }

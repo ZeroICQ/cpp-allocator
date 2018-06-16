@@ -1,37 +1,39 @@
 #include <list>
 #include "catch.hpp"
 #include "fixed_allocator.h"
+#include "test_helper.h"
 
-template <class T>
-bool is_same(const std::list<T, atl::allocator<T>>& atl_list, const std::list<T>& std_list)
+using atl::TestHelper;
+
+TEST_CASE("create list<int>")
 {
-    if (atl_list.size() != std_list.size()) {
-        return false;
-    }
+    std::list<int> std_list;
+    std::list<int, atl::allocator<int>> atl_list;
 
-    auto it_a = atl_list.begin();
-    auto it_s = std_list.begin();
-
-    for (;it_a != atl_list.end(); it_a++, it_s++) {
-        if (*it_a != *it_s) {
-            return false;
-        }
-    }
-    return true;
+    TestHelper::push_rnd_values(std_list);
+    TestHelper::push_rnd_values(atl_list);
+    REQUIRE(TestHelper::is_same(atl_list, std_list));
 }
 
-template <class T>
-void copy(std::list<T, atl::allocator<T>>& atl_list, const std::list<T> std_list)
+TEST_CASE("create list<string>")
 {
-    for (auto it = std_list.begin(); it != std_list.end(); it++) {
-        atl_list.push_back(*it);
-    }
+    std::list<std::string> std_list;
+    std::list<std::string, atl::allocator<std::string>> atl_list;
+
+    TestHelper::push_rnd_values(std_list);
+    TestHelper::push_rnd_values(atl_list);
+    REQUIRE(TestHelper::is_same(atl_list, std_list));
 }
 
-TEST_CASE("test int")
+TEST_CASE("popfronts")
 {
-    std::list<int> std_list = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
-    std::list<int, atl::allocator<int>> alloc_list;
-    copy(alloc_list, std_list);
-    REQUIRE(is_same(alloc_list, std_list));
+    std::list<std::string> std_list;
+    std::list<std::string, atl::allocator<std::string>> atl_list;
+
+    TestHelper::push_rnd_values(std_list);
+    TestHelper::push_rnd_values(atl_list);
+
+    TestHelper::pop_backs(std_list, 900);
+    TestHelper::pop_backs(atl_list, 900);
+    REQUIRE(TestHelper::is_same(atl_list, std_list));
 }

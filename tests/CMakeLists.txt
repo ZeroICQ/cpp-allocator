@@ -9,9 +9,12 @@ include_directories(inc ${allocator_include_dir})
 
 set(TEST_SRC
         catch.cpp
-        allocator_tests.cpp)
+        allocator_tests.cpp
+        )
 
 add_executable(allocator_tests ${TEST_SRC})
+
+target_include_directories(allocator_tests INTERFACE .)
 
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
     target_compile_options(allocator_tests PRIVATE -g3 -O0 -coverage)

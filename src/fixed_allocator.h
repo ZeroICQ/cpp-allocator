@@ -65,6 +65,9 @@ template<class T>
 void allocator<T>::deallocate(T* pointer, size_t n)
 {
     assert(0 <= n && n <= 1);
+    if (n == 0) {
+        return;
+    }
     free_.push_back(pointer);
 }
 

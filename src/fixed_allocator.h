@@ -20,7 +20,7 @@ public:
     void deallocate(T* pointer, size_t n);
 
 private:
-    static constexpr size_t MAX_MEMORY = 104857600;//in bytes. now 100mb
+    static constexpr size_t MAX_MEMORY = 1073741824;//in bytes. now 1GB
     size_t memory_used_;
     size_t max_size_;
     T* memory_block_;

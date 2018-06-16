@@ -25,7 +25,20 @@ TEST_CASE("create list<string>")
     REQUIRE(TestHelper::is_same(atl_list, std_list));
 }
 
-TEST_CASE("popfronts")
+TEST_CASE("popbacks int")
+{
+    std::list<int> std_list;
+    std::list<int, atl::allocator<std::string>> atl_list;
+
+    TestHelper::push_rnd_values(std_list);
+    TestHelper::push_rnd_values(atl_list);
+
+    TestHelper::pop_backs(std_list, 900);
+    TestHelper::pop_backs(atl_list, 900);
+    REQUIRE(TestHelper::is_same(atl_list, std_list));
+}
+
+TEST_CASE("popbacks string")
 {
     std::list<std::string> std_list;
     std::list<std::string, atl::allocator<std::string>> atl_list;
@@ -37,3 +50,17 @@ TEST_CASE("popfronts")
     TestHelper::pop_backs(atl_list, 900);
     REQUIRE(TestHelper::is_same(atl_list, std_list));
 }
+
+TEST_CASE("popfronts")
+{
+    std::list<std::string> std_list;
+    std::list<std::string, atl::allocator<std::string>> atl_list;
+
+    TestHelper::push_rnd_values(std_list);
+    TestHelper::push_rnd_values(atl_list);
+
+    TestHelper::pop_front(std_list, 600);
+    TestHelper::pop_front(atl_list, 600);
+    REQUIRE(TestHelper::is_same(atl_list, std_list));
+}
+

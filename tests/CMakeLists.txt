@@ -17,8 +17,8 @@ add_executable(allocator_tests ${TEST_SRC})
 target_include_directories(allocator_tests INTERFACE .)
 
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
-    target_compile_options(allocator_tests PRIVATE -g3 -O0 -coverage)
-    set_target_properties(allocator_tests  PROPERTIES LINK_FLAGS "${LINK_FLAGS} -coverage")
+    target_compile_options(allocator_tests PRIVATE -g3 -O0 -coverage -fsanitize=address)
+    set_target_properties(allocator_tests  PROPERTIES LINK_FLAGS "${LINK_FLAGS} -coverage -fsanitize=address")
 endif()
 
 SETUP_TARGET_FOR_COVERAGE(

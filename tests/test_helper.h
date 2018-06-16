@@ -7,30 +7,43 @@
 
 namespace atl{
 
+class LargeObject
+{
+private:
+    int array[10000];
+};
+
 class TestHelper
 {
 public:
     TestHelper() = delete;
-    template <class T>
-    static bool is_same(const std::list<T, atl::allocator<T>>& atl_list, const std::list<T>& std_list);
+    template <class T, class AllocT, class AllocU>
+    static bool is_same(const std::list<T, AllocT>& atl_list, const std::list<T, AllocU>& std_list);
+
     template <class T>
     static void copy(std::list<T, atl::allocator<T>>& atl_list, const std::list<T>& std_list);
     //fill
     template <class Alloc>
-    static void push_rnd_values(std::list<int, Alloc> &list, size_t n = 1000);
+    static void push_rnd_values(std::list<int, Alloc>& list, size_t n = 1000000);
     template <class Alloc>
-    static void push_rnd_values(std::list<std::string, Alloc>& list, size_t n = 1000,
+    static void push_rnd_values(std::list<std::string, Alloc>& list, size_t n = 1000000,
                                 size_t min_length = 3, size_t max_length = 100);
-    //operations
+
     template <class Alloc>
-    static void pop_backs(std::list<std::string, Alloc>& list, size_t n = 1);
+    static void push_rnd_values(std::list<LargeObject, Alloc>& list, size_t n = 1000);
+
+    //operations
+    template <class U, class Alloc>
+    static void pop_backs(std::list<U, Alloc>& list, size_t n = 1);
+    template <class Alloc>
+    static void pop_front(std::list<std::string, Alloc>& list, size_t n = 1);
 
 private:
     static const int SEED = 123;
 };
 
-template<class T>
-bool TestHelper::is_same(const std::list<T, atl::allocator<T>>& atl_list, const std::list<T>& std_list)
+template<class T, class AllocT, class AllocU>
+bool TestHelper::is_same(const std::list<T, AllocT>& atl_list, const std::list<T, AllocU>& std_list)
 {
     if (atl_list.size() != std_list.size()) {
         return false;
@@ -89,7 +102,17 @@ void TestHelper::push_rnd_values(std::list<std::string, Alloc>& list, size_t n, 
 }
 
 template<class Alloc>
-void TestHelper::pop_backs(std::list<std::string, Alloc>& list, size_t n)
+void TestHelper::push_rnd_values(std::list<LargeObject, Alloc> &list, size_t n)
+{
+//    std::srand(SEED);
+    for (size_t i = 0; i < n; i++) {
+//        int val = std::rand();
+        list.emplace_back();
+    }
+}
+
+template<class U, class Alloc>
+void TestHelper::pop_backs(std::list<U, Alloc>& list, size_t n)
 {
     n = std::min(n, list.size());
     for (size_t i = 0; i < n; i++) {
@@ -97,4 +120,13 @@ void TestHelper::pop_backs(std::list<std::string, Alloc>& list, size_t n)
     }
 }
 
-}//namespace atl
+template<class Alloc>
+void TestHelper::pop_front(std::list<std::string, Alloc> &list, size_t n)
+{
+    n = std::min(n, list.size());
+    for (size_t i = 0; i < n; i++) {
+        list.pop_front();
+    }
+}
+
+};//namespace atl

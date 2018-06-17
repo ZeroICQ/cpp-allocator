@@ -7,9 +7,7 @@ using atl::TestHelper;
 using atl::LargeObject;
 
 const size_t PUSH_AMOUNT = 10000000;//10^7
-const size_t POP_AMOUNT  =  5000000;//half
 const size_t PUSH_LARGE_AMOUNT = 200000;//10^5
-const size_t POP_LARGE_AMOUNT  = 2400;//half
 
 template <class T, class Alloc>
 void push_vals(benchmark::State& state, std::list<T, Alloc>& list, size_t amount = PUSH_AMOUNT)
@@ -92,9 +90,10 @@ static void BM_std_popback_int(benchmark::State& state)
         state.PauseTiming();
         std::list<int> test_list;
         TestHelper::push_rnd_values(test_list, PUSH_AMOUNT);
-        state.ResumeTiming();
 
+        state.ResumeTiming();
         TestHelper::pop_backs(test_list, PUSH_AMOUNT);
+        state.PauseTiming();
     }
 }
 
@@ -104,9 +103,10 @@ static void BM_atl_popback_int(benchmark::State& state)
         state.PauseTiming();
         std::list<int, atl::allocator<int>> test_list;
         TestHelper::push_rnd_values(test_list, PUSH_AMOUNT);
-        state.ResumeTiming();
 
+        state.ResumeTiming();
         TestHelper::pop_backs(test_list, PUSH_AMOUNT);
+        state.PauseTiming();
     }
 }
 
@@ -116,9 +116,10 @@ static void BM_std_popback_string(benchmark::State& state)
         state.PauseTiming();
         std::list<std::string> test_list;
         TestHelper::push_rnd_values(test_list, PUSH_AMOUNT);
-        state.ResumeTiming();
 
+        state.ResumeTiming();
         TestHelper::pop_backs(test_list, PUSH_AMOUNT);
+        state.PauseTiming();
     }
 }
 
@@ -128,9 +129,10 @@ static void BM_atl_popback_string(benchmark::State& state)
         state.PauseTiming();
         std::list<std::string, atl::allocator<std::string>> test_list;
         TestHelper::push_rnd_values(test_list, PUSH_AMOUNT);
-        state.ResumeTiming();
 
+        state.ResumeTiming();
         TestHelper::pop_backs(test_list, PUSH_AMOUNT);
+        state.PauseTiming();
     }
 }
 
@@ -138,11 +140,13 @@ static void BM_std_popback_large(benchmark::State& state)
 {
     for (auto _ : state) {
         state.PauseTiming();
+        benchmark::ClobberMemory();
         std::list<LargeObject> test_list;
         TestHelper::push_rnd_values(test_list, PUSH_LARGE_AMOUNT);
-        state.ResumeTiming();
 
+        state.ResumeTiming();
         TestHelper::pop_backs(test_list, PUSH_LARGE_AMOUNT);
+        state.PauseTiming();
     }
 }
 
@@ -150,11 +154,13 @@ static void BM_atl_popback_large(benchmark::State& state)
 {
     for (auto _ : state) {
         state.PauseTiming();
+        benchmark::ClobberMemory();
         std::list<LargeObject, atl::allocator<LargeObject>> test_list;
         TestHelper::push_rnd_values(test_list, PUSH_LARGE_AMOUNT);
-        state.ResumeTiming();
 
+        state.ResumeTiming();
         TestHelper::pop_backs(test_list, PUSH_LARGE_AMOUNT);
+        state.PauseTiming();
     }
 }
 
@@ -168,8 +174,10 @@ static void BM_std_popfront_int(benchmark::State& state)
         state.PauseTiming();
         std::list<int> test_list;
         TestHelper::push_rnd_values(test_list, PUSH_AMOUNT);
+
         state.ResumeTiming();
-        TestHelper::pop_front(test_list, POP_AMOUNT);
+        TestHelper::pop_front(test_list, PUSH_AMOUNT);
+        state.PauseTiming();
     }
 }
 
@@ -179,8 +187,10 @@ static void BM_atl_popfront_int(benchmark::State& state)
         state.PauseTiming();
         std::list<int, atl::allocator<int>> test_list;
         TestHelper::push_rnd_values(test_list, PUSH_AMOUNT);
+
         state.ResumeTiming();
-        TestHelper::pop_front(test_list, POP_AMOUNT);
+        TestHelper::pop_front(test_list, PUSH_AMOUNT);
+        state.PauseTiming();
     }
 }
 
@@ -190,8 +200,10 @@ static void BM_std_popfront_string(benchmark::State& state)
         state.PauseTiming();
         std::list<std::string> test_list;
         TestHelper::push_rnd_values(test_list, PUSH_AMOUNT);
+
         state.ResumeTiming();
         TestHelper::pop_front(test_list, PUSH_AMOUNT);
+        state.PauseTiming();
     }
 }
 
@@ -201,8 +213,10 @@ static void BM_atl_popfront_string(benchmark::State& state)
         state.PauseTiming();
         std::list<std::string, atl::allocator<std::string>> test_list;
         TestHelper::push_rnd_values(test_list, PUSH_AMOUNT);
+
         state.ResumeTiming();
         TestHelper::pop_front(test_list, PUSH_AMOUNT);
+        state.PauseTiming();
     }
 }
 
@@ -212,8 +226,10 @@ static void BM_std_popfront_large(benchmark::State& state)
         state.PauseTiming();
         std::list<LargeObject> test_list;
         TestHelper::push_rnd_values(test_list, PUSH_LARGE_AMOUNT);
+
         state.ResumeTiming();
         TestHelper::pop_front(test_list, PUSH_LARGE_AMOUNT);
+        state.PauseTiming();
     }
 }
 
@@ -225,30 +241,31 @@ static void BM_atl_popfront_large(benchmark::State& state)
         TestHelper::push_rnd_values(test_list, PUSH_LARGE_AMOUNT);
         state.ResumeTiming();
         TestHelper::pop_front(test_list, PUSH_LARGE_AMOUNT);
+        state.PauseTiming();
     }
 }
 
 // Register the functions as a benchmark
 //pushes
-BENCHMARK(BM_std_push_int);
-BENCHMARK(BM_atl_push_int);
-
-BENCHMARK(BM_std_push_string);
-BENCHMARK(BM_atl_push_string);
-
-BENCHMARK(BM_std_push_large);
-BENCHMARK(BM_atl_push_large);
+//BENCHMARK(BM_std_push_int);
+//BENCHMARK(BM_atl_push_int);
+//
+//BENCHMARK(BM_std_push_string);
+//BENCHMARK(BM_atl_push_string);
+//
+//BENCHMARK(BM_std_push_large);
+//BENCHMARK(BM_atl_push_large);
 
 ////popbacks
-//BENCHMARK(BM_std_popback_int);
-//BENCHMARK(BM_atl_popback_int);
+BENCHMARK(BM_std_popback_int);
+BENCHMARK(BM_atl_popback_int);
 //
-//BENCHMARK(BM_std_popback_string);
-//BENCHMARK(BM_atl_popback_string);
-//
-//BENCHMARK(BM_std_popback_large);
-//BENCHMARK(BM_atl_popback_large);
-//
+BENCHMARK(BM_std_popback_string);
+BENCHMARK(BM_atl_popback_string);
+
+BENCHMARK(BM_std_popback_large);
+BENCHMARK(BM_atl_popback_large);
+
 ////popfronts
 //BENCHMARK(BM_std_popfront_int);
 //BENCHMARK(BM_atl_popfront_int);

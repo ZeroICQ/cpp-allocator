@@ -2,6 +2,7 @@
 
 
 #include <list>
+#include <type_traits>
 #include <random>
 #include "fixed_allocator.h"
 
@@ -10,7 +11,7 @@ namespace atl{
 class LargeObject
 {
 private:
-    int array[10000];
+    int array[1000];
 };
 
 class TestHelper
@@ -24,10 +25,14 @@ public:
     static void copy(std::list<T, atl::allocator<T>>& atl_list, const std::list<T>& std_list);
     //fill
     template <class Alloc>
-    static void push_rnd_values(std::list<int, Alloc>& list, size_t n = 1000000);
+    static void push_rnd_values(std::list<int, Alloc>& list, size_t n = 1000);
     template <class Alloc>
-    static void push_rnd_values(std::list<std::string, Alloc>& list, size_t n = 1000000,
+    static void push_rnd_values(std::list<std::string, Alloc>& list, size_t n = 1000,
                                 size_t min_length = 3, size_t max_length = 100);
+    template <class T>
+    static T get_rnd_val() { throw std::bad_exception(); }
+
+    static void reset_rnd() { std::srand(SEED); }
 
     template <class Alloc>
     static void push_rnd_values(std::list<LargeObject, Alloc>& list, size_t n = 1000);
@@ -35,8 +40,8 @@ public:
     //operations
     template <class U, class Alloc>
     static void pop_backs(std::list<U, Alloc>& list, size_t n = 1);
-    template <class Alloc>
-    static void pop_front(std::list<std::string, Alloc>& list, size_t n = 1);
+    template <class U, class Alloc>
+    static void pop_front(std::list<U, Alloc>& list, size_t n = 1);
 
 private:
     static const int SEED = 123;
@@ -75,8 +80,7 @@ void TestHelper::push_rnd_values(std::list<int, Alloc>& list, size_t n)
     std::srand(SEED);
 
     for (size_t i = 0; i < n; i++) {
-        int val = std::rand();
-        list.push_back(val);
+        list.push_back(TestHelper::get_rnd_val<int>());
     }
 }
 
@@ -84,29 +88,15 @@ template <class Alloc>
 void TestHelper::push_rnd_values(std::list<std::string, Alloc>& list, size_t n, size_t min_length, size_t max_length)
 {
     std::srand(SEED);
-    static const char alphanum[] = "0123456789"
-                                   "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-                                   "abcdefghijklmnopqrstuvwxyz";
     for (size_t i = 0; i < n; i++) {
-        size_t string_length = (rand() % (max_length - min_length)) + min_length;
-
-        std::string rnd_string;
-        rnd_string.reserve(string_length);
-
-        for (size_t j = 0; j < string_length; j++) {
-            auto rnd_char = alphanum[rand() % (sizeof(alphanum) - 1)];
-            rnd_string.push_back(rnd_char);
-        }
-        list.push_back(rnd_string);
+        list.push_back(TestHelper::get_rnd_val<std::string>());
     }
 }
 
 template<class Alloc>
-void TestHelper::push_rnd_values(std::list<LargeObject, Alloc> &list, size_t n)
+void TestHelper::push_rnd_values(std::list<LargeObject, Alloc>& list, size_t n)
 {
-//    std::srand(SEED);
     for (size_t i = 0; i < n; i++) {
-//        int val = std::rand();
         list.emplace_back();
     }
 }
@@ -120,8 +110,8 @@ void TestHelper::pop_backs(std::list<U, Alloc>& list, size_t n)
     }
 }
 
-template<class Alloc>
-void TestHelper::pop_front(std::list<std::string, Alloc> &list, size_t n)
+template<class U, class Alloc>
+void TestHelper::pop_front(std::list<U, Alloc>& list, size_t n)
 {
     n = std::min(n, list.size());
     for (size_t i = 0; i < n; i++) {
@@ -129,4 +119,40 @@ void TestHelper::pop_front(std::list<std::string, Alloc> &list, size_t n)
     }
 }
 
-};//namespace atl
+
+template<>
+int TestHelper::get_rnd_val<int>()
+{
+    return std::rand();
+}
+
+template<>
+LargeObject TestHelper::get_rnd_val<LargeObject>()
+{
+    return LargeObject();
+}
+
+template<>
+std::string TestHelper::get_rnd_val<std::string>()
+{
+    static const char alphanum[] = "0123456789"
+                                   "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                                   "abcdefghijklmnopqrstuvwxyz";
+
+    size_t min_length = 3;
+    size_t max_length = 100;
+
+    size_t string_length = (rand() % (max_length - min_length)) + min_length;
+
+    std::string rnd_string;
+    rnd_string.reserve(string_length);
+
+    for (size_t j = 0; j < string_length; j++) {
+        auto rnd_char = alphanum[rand() % (sizeof(alphanum) - 1)];
+        rnd_string.push_back(rnd_char);
+    }
+    return rnd_string;
+}
+
+
+}//namespace atl

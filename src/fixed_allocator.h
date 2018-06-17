@@ -1,6 +1,7 @@
 #pragma once
 
-#include <vector>
+//#include <vector>
+#include <array>
 #include <assert.h>
 
 namespace atl {
@@ -25,7 +26,9 @@ private:
     size_t max_size_;
     T* memory_block_;
 
-    std::vector<T*> free_;
+    T** free_;
+    size_t free_size_;
+    size_t curr_free_ = 0;
 };
 
 template<class T>
@@ -36,29 +39,30 @@ allocator<T>::allocator() noexcept
     //ASK: this vs malloc
     memory_block_ = reinterpret_cast<T*>(new char[memory_used_]);
 
-    free_.reserve(max_size_);
+    free_ = new T*[max_size_];
 
     for (size_t i = 0; i < max_size_; i++) {
-        free_.push_back(memory_block_ + i);
+        free_[i] = memory_block_ + i;
     }
+
+    free_size_ = max_size_;
 }
 
 template<class T>
 allocator<T>::~allocator()
 {
     delete[] memory_block_;
+    delete[] free_;
 }
 
 template<class T>
 T* allocator<T>::allocate(size_t n)
 {
-    if (n > 1 || free_.empty()) {
+    if (n > 1 || curr_free_  == max_size_) {
         throw std::bad_alloc();
     }
 
-    T* pointer_to_allocated_memory = free_.back();
-    free_.pop_back();
-    return  pointer_to_allocated_memory;
+    return free_[curr_free_++];
 }
 
 template<class T>
@@ -68,7 +72,7 @@ void allocator<T>::deallocate(T* pointer, size_t n)
     if (n == 0) {
         return;
     }
-    free_.push_back(pointer);
+    free_[--curr_free_] = pointer;
 }
 
 }//namespace atl

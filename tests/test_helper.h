@@ -29,13 +29,13 @@ public:
     template <class Alloc>
     static void push_rnd_values(std::list<std::string, Alloc>& list, size_t n = 1000,
                                 size_t min_length = 3, size_t max_length = 100);
+    template <class Alloc>
+    static void push_rnd_values(std::list<LargeObject, Alloc>& list, size_t n = 1000);
+
     template <class T>
     static T get_rnd_val() { throw std::bad_exception(); }
 
     static void reset_rnd() { std::srand(SEED); }
-
-    template <class Alloc>
-    static void push_rnd_values(std::list<LargeObject, Alloc>& list, size_t n = 1000);
 
     //operations
     template <class U, class Alloc>

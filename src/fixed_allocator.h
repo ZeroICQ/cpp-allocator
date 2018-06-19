@@ -1,8 +1,8 @@
 #pragma once
 
 //#include <vector>
+#include <cstring>
 #include <array>
-#include <assert.h>
 
 namespace atl {
 
@@ -13,15 +13,13 @@ public:
 
     allocator() noexcept;
     allocator(const allocator&) noexcept;
-    template <class U>
-    allocator(const allocator<U>&) noexcept;
 
     ~allocator();
     T* allocate(size_t n);
     void deallocate(T* pointer, size_t n);
 
 private:
-    static constexpr size_t MAX_MEMORY = 1073741824;//in bytes. now 1GB
+    static constexpr size_t MAX_MEMORY = 536870912;//in bytes. now 500MB
     size_t memory_used_;
     size_t max_size_;
     T* memory_block_;
@@ -46,6 +44,23 @@ allocator<T>::allocator() noexcept
     }
 
     free_size_ = max_size_;
+}
+
+template<class T>
+allocator<T>::allocator(const allocator& other) noexcept
+{
+    delete[] memory_block_;
+    delete[] free_;
+
+    max_size_    = other.max_size_;
+    memory_used_ = other.memory_used_;
+    free_size_   = other.free_size_;
+
+    memory_block_ = reinterpret_cast<T*>(new char[memory_used_]);
+    free_ = new T*[max_size_];
+
+    std::memcpy(memory_block_, other.memory_block_, memory_used_);
+    std::memcpy(free_, other.free_, free_size_);
 }
 
 template<class T>

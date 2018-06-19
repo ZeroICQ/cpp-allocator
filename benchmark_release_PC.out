@@ -1,0 +1,36 @@
+2018-06-20 00:01:56
+Running ./benchmarks
+Run on (4 X 3800 MHz CPU s)
+CPU Caches:
+  L1 Data 32K (x4)
+  L1 Instruction 32K (x4)
+  L2 Unified 256K (x4)
+  L3 Unified 6144K (x1)
+-----------------------------------------------------------------
+Benchmark                          Time           CPU Iterations
+-----------------------------------------------------------------
+[0;32mBM_std_push_int           [m[0;33m1175602027 ns 1175287763 ns [m[0;36m         1[m
+[m[0;32mBM_atl_push_int           [m[0;33m1186371633 ns 1185761862 ns [m[0;36m         1[m
+[m[0;32mBM_std_push_string        [m[0;33m2276665222 ns 2263524567 ns [m[0;36m         1[m
+[m[0;32mBM_atl_push_string        [m[0;33m1929213955 ns 1918664987 ns [m[0;36m         1[m
+[m[0;32mBM_std_push_large         [m[0;33m  67080640 ns   67055591 ns [m[0;36m        11[m
+[m[0;32mBM_atl_push_large         [m[0;33m  29117643 ns   28837724 ns [m[0;36m        25[m
+[m[0;32mBM_std_popback_int        [m[0;33m  22540316 ns   22303116 ns [m[0;36m        32[m
+[m[0;32mBM_atl_popback_int        [m[0;33m  22029867 ns   21816671 ns [m[0;36m        33[m
+[m[0;32mBM_atl_popback_string     [m[0;33m 166718674 ns  165093622 ns [m[0;36m         4[m
+[m[0;32mBM_std_popback_string     [m[0;33m 173263221 ns  171981307 ns [m[0;36m         4[m
+[m[0;32mBM_std_popback_large      [m[0;33m   3242558 ns    3214491 ns [m[0;36m       231[m
+[m[0;32mBM_atl_popback_large      [m[0;33m   2710517 ns    2688071 ns [m[0;36m       241[m
+[m[0;32mBM_std_popfront_int       [m[0;33m  21956846 ns   21771351 ns [m[0;36m        32[m
+[m[0;32mBM_atl_popfront_int       [m[0;33m  11749424 ns   11624912 ns [m[0;36m        57[m
+[m[0;32mBM_std_popfront_string    [m[0;33m 160086279 ns  158790063 ns [m[0;36m         4[m
+[m[0;32mBM_atl_popfront_string    [m[0;33m 190006264 ns  188428081 ns [m[0;36m         3[m
+[m[0;32mBM_std_popfront_large     [m[0;33m   2956145 ns    2935011 ns [m[0;36m       261[m
+[m[0;32mBM_atl_popfront_large     [m[0;33m   3206286 ns    3182950 ns [m[0;36m       229[m
+[m[0;32mBM_std_rnd_actions_int    [m[0;33m6511029178 ns 6502582182 ns [m[0;36m         1[m
+[m[0;32mBM_std_atl_actions_int    [m[0;33m6476741357 ns 6472494586 ns [m[0;36m         1[m
+[m[0;32mBM_std_rnd_actions_string [m[0;33m7148523666 ns 7121593177 ns [m[0;36m         1[m
+[m[0;32mBM_std_atl_actions_string [m[0;33m7120988833 ns 7091983868 ns [m[0;36m         1[m
+[m[0;32mBM_std_rnd_actions_large  [m[0;33m7183008177 ns 7154544006 ns [m[0;36m         1[m
+[m[0;32mBM_std_atl_actions_large  [m[0;33m6988856531 ns 7033154239 ns [m[0;36m         1[m
+[m

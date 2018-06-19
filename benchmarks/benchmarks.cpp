@@ -346,8 +346,8 @@ BENCHMARK(BM_atl_push_large);
 BENCHMARK(BM_std_popback_int);
 BENCHMARK(BM_atl_popback_int);
 
-BENCHMARK(BM_atl_popback_string);
 BENCHMARK(BM_std_popback_string);
+BENCHMARK(BM_atl_popback_string);
 
 BENCHMARK(BM_std_popback_large);
 BENCHMARK(BM_atl_popback_large);

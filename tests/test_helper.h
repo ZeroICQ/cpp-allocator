@@ -139,8 +139,8 @@ std::string TestHelper::get_rnd_val<std::string>()
                                    "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
                                    "abcdefghijklmnopqrstuvwxyz";
 
-    size_t min_length = 3;
-    size_t max_length = 100;
+    size_t min_length = 1000;
+    size_t max_length = 2000;
 
     size_t string_length = (rand() % (max_length - min_length)) + min_length;
 
